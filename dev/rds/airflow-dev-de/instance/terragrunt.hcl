@@ -1,6 +1,5 @@
 terraform {
-  # Use a local path for the module
-  source = "../../../../../terraform-modules/postgres"
+  source = "git@github.com:adwiza/terraform-modules.git//postgres/?ref=main"
 }
 
 include "root" {
