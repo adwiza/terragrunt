@@ -1,5 +1,5 @@
 terraform {
-  source = "git@github.com:adwiza/terraform-modules.git//postgres?ref=v1.1.0"
+  source = "git@github.com:adwiza/terraform-modules.git//postgres?ref=v1.1.1"
 }
 
 # terraform {
@@ -10,23 +10,29 @@ include "root" {
   path = find_in_parent_folders()
 }
 
+locals {
+  vault_path = "secret/rds/airflow_dev_ml_db/airflow_dev_ml_user"
+}
+
 inputs = {
   database_name = "airflow_dev_ml_db"
 
+  vault_path = local.vault_path
   roles = [
     {
       name        = "airflow_dev_ml_user"
-      password   = null  # This will trigger password generation
-      superuser  = false
-      login      = true
+      password    = null
+      superuser   = false
+      login       = true
       replication = false
-      bypass_rls = false
+      bypass_rls  = false
     }
+
   ]
 
-  postgresql_host     = "localhost"
-  postgresql_port     = 5432
-  postgresql_username = "postgres"
-  postgresql_password = "password"
-  postgresql_sslmode  = "disable"
+  postgresql_host          = "localhost"
+  postgresql_port          = 5432
+  postgresql_root_username = "postgres"
+  postgresql_sslmode       = "disable"
+  postgresql_root_password = get_env("POSTGRESQL_ROOT_PASSWORD")
 }
