@@ -1,26 +1,33 @@
 terraform {
-  source = "git@github.com:adwiza/terraform-modules.git//postgres?ref=v1.1.1"
+  source = "git@github.com:adwiza/terraform-modules.git//postgres?ref=v1.4.0"
 }
 
 # terraform {
 #   source = "../../../../../terraform-modules/postgres/"
 # }
 
+prevent_destroy = false
+
 include "root" {
   path = find_in_parent_folders()
 }
 
 locals {
-  vault_path = "secret/rds/airflow_dev_ml_db/airflow_dev_ml_user"
+  database_name = "airflow_dev_ml_db"
+  env           = split("/", path_relative_to_include())[0]
+  vault_path    = "secret/${local.env}/rds/${local.database_name}"
+  username      = "airflow_dev_ml_user"
+  dialect       = "postgres"
 }
 
 inputs = {
-  database_name = "airflow_dev_ml_db"
+  database_name = local.database_name
+  vault_path    = local.vault_path
+  dialect       = local.dialect
 
-  vault_path = local.vault_path
   roles = [
     {
-      name        = "airflow_dev_ml_user"
+      name        = local.username
       password    = null
       superuser   = false
       login       = true
