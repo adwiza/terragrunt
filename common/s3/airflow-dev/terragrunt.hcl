@@ -9,10 +9,10 @@ include "root" {
 }
 
 locals {
-  bucket_name = "airflow-dev"
+  bucket_name = "airflow-dev" # Define your bucket name here
 }
 
 inputs = {
   bucket_name = local.bucket_name
-  acl    = "public"
-}  
+  acl         = "private"
+}
