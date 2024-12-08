@@ -1,5 +1,5 @@
 terraform {
-  source = "git@github.com:adwiza/terraform-modules.git//postgres?ref=v1.4.0"
+  source = "git@github.com:adwiza/terraform-modules.git//postgres?ref=v1.5.0"
 }
 
 # terraform {

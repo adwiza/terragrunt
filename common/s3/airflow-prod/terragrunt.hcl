@@ -13,7 +13,7 @@ include "root" {
 }
 
 locals {
-  bucket_name = "airflow-dev"
+  bucket_name = "airflow-prod"
 }
 
 inputs = {
