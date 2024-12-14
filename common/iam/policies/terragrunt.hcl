@@ -143,7 +143,7 @@ POLICY
   ldap_groups_policy_attachments = [
     {
       group_dn = "cn=minio-group,ou=Groups,o=bytepark,c=ru,dc=bytepark,dc=ru"
-      policies = ["dev_policy", "prod_policy", "airflow_prod_policy"]
+      policies = ["dev_policy", "airflow_dev_policy"]
     },
     {
       group_dn = "cn=minio-admin-group,ou=Groups,o=bytepark,c=ru,dc=bytepark,dc=ru"
