@@ -1,19 +1,50 @@
-# terraform {
-#   source = "git@github.com:adwiza/terraform-modules.git//iam?ref=v1.5.0"
-# }
-
 terraform {
-  source = "../../../../terraform-modules/iam/"
+  source = "git@github.com:adwiza/terraform-modules.git//iam?ref=v1.6.0"
 }
+
+# terraform {
+#   source = "../../../../terraform-modules/iam/"
+# }
 
 prevent_destroy = false
 
-include "root" {
+include "remote_backend" {
   path = find_in_parent_folders()
 }
 
 inputs = {
   iam_policies = [
+    {
+      iam_policy_name = "consoleAdmin"
+      iam_policy_json = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "admin:*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "kms:*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::*"
+            ]
+        }
+    ]
+}
+POLICY
+    },
     {
       iam_policy_name = "dev_policy"
       iam_policy_json = <<POLICY
@@ -109,24 +140,14 @@ POLICY
     }
   ]
 
-  # ldap_groups_policy_attachments = [
-  #   {
-  #     group_dn = "CN=admins,OU=Unit,DC=example,DC=com"
-  #     policies = ["dev_policy", "prod_policy"]
-  #   },
-  #   {
-  #     group_dn = "CN=developers,OU=Unit,DC=example,DC=com"
-  #     policies = ["dev_policy"]
-  #   }
-  # ]
-  non_ldap_group_policy_attachments = [
+  ldap_groups_policy_attachments = [
     {
-      group_name = "admins"
-      policies   = ["prod_policy", "airflow_prod_policy"]
+      group_dn = "cn=minio-group,dc=bytepark,dc=ru"
+      policies = ["dev_policy", "prod_policy", "airflow_prod_policy"]
     },
     {
-      group_name = "developers"
-      policies   = ["dev_policy", "airflow_dev_policy"]
+      group_dn = "cn=minio-admin-group,dc=bytepark,dc=ru"
+      policies = ["consoleAdmin"]
     }
   ]
 }

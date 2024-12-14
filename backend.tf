@@ -2,7 +2,7 @@
 terraform {
   backend "s3" {
     bucket                      = "terragrunt"
-    encrypt                     = false
+    encrypt                     = true
     endpoint                    = "http://192.168.3.14:9000"
     force_path_style            = true
     key                         = "terraform.tfstate"
